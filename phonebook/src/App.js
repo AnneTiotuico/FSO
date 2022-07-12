@@ -19,25 +19,47 @@ const App = () => {
       })
   }, [])
 
+  const updatePerson = (existing) => {    
+    if (existing.number === newNumber) {
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      if (window.confirm(`${existing.name} is already added to phonebook, replace old number with a new one?`)) {
+        existing.number = newNumber
+        personService
+          .updatePerson(existing.id, existing)
+          .then(updatedPerson => {
+            setPersons(persons.map(p => p.id !== existing.id ? p : updatedPerson))
+          })
+      }
+    }
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
 
-    if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
-      alert(`${newName} is already added to phonebook`)
-      setNewName('')
-      setNewNumber('')
-      return
+    const existingPerson = () => {
+      return persons.filter(person => 
+        person.name.toLowerCase() === newName.toLowerCase()
+      )[0]
     }
 
-    let newPerson = {name: newName, number: newNumber};
+    let existing = existingPerson();
 
-    personService
-      .create(newPerson)
-      .then(addedPerson => {
-      setPersons([...persons, addedPerson])
+    if (existing) {
+      updatePerson(existing)
       setNewName('')
       setNewNumber('')
-    })
+    } else if (newName !== '') {
+      let newPerson = {name: newName, number: newNumber};
+
+      personService
+        .create(newPerson)
+        .then(addedPerson => {
+          setPersons([...persons, addedPerson])
+          setNewName('')
+          setNewNumber('')
+      })
+    }
   }
 
 
@@ -62,6 +84,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Search newSearch={newSearch} handleNewSearch={handleNewSearch}/>
+      <h2>Add Person</h2>
       <PersonForm addPerson={addPerson} newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} />
       <h2>Numbers</h2>
       <Persons persons={filteredPersons} handleDelete={deletePerson} />

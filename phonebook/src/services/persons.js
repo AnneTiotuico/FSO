@@ -22,5 +22,16 @@ const deletePerson = id => {
   });
 }
 
+const updatePerson = (id, data) => {
+  let result = fetch(`${baseURL}/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  return result.then(response => response.json())
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create, deletePerson }
+export default { getAll, create, deletePerson, updatePerson }
