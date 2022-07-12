@@ -16,5 +16,11 @@ const create = newPerson => {
   return result.then(response => response.json())
 }
 
+const deletePerson = id => {
+  fetch(`${baseURL}/${id}`, {
+    method: 'DELETE',
+  });
+}
+
 // eslint-disable-next-line import/no-anonymous-default-export
-export default { getAll, create }
+export default { getAll, create, deletePerson }

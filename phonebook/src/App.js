@@ -40,6 +40,14 @@ const App = () => {
     })
   }
 
+
+  const deletePerson = person => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.deletePerson(person.id)
+      setPersons(persons.filter(p => p.id !== person.id))
+    }
+  }
+
   const handleNewSearch = (e) => {
     setNewSearch(e.target.value)
     setShowAll(false)
@@ -56,7 +64,7 @@ const App = () => {
       <Search newSearch={newSearch} handleNewSearch={handleNewSearch}/>
       <PersonForm addPerson={addPerson} newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      <Persons persons={filteredPersons} handleDelete={deletePerson} />
     </div>
   )
 }
