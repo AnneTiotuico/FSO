@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import Search from './components/Search'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,22 +12,32 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
 
   useEffect(() => {
-    fetch('http://localhost:3001/persons')
-      .then(response => response.json())
-      .then(persons => setPersons(persons))
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
+
     if (persons.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
       alert(`${newName} is already added to phonebook`)
       setNewName('')
       setNewNumber('')
       return
     }
-    setPersons([...persons, {name: newName, number: newNumber}])
-    setNewName('')
-    setNewNumber('')
+
+    let newPerson = {name: newName, number: newNumber};
+
+    personService
+      .create(newPerson)
+      .then(addedPerson => {
+      setPersons([...persons, addedPerson])
+      setNewName('')
+      setNewNumber('')
+    })
   }
 
   const handleNewSearch = (e) => {
