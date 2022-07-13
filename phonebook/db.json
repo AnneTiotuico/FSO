@@ -22,18 +22,23 @@
     },
     {
       "name": "Anne",
-      "number": "345345",
+      "number": "34134",
       "id": 5
     },
     {
       "name": "Quinn",
-      "number": "1234",
+      "number": "123",
       "id": 6
     },
     {
-      "name": "Test",
-      "number": "678",
+      "name": "A",
+      "number": "13",
       "id": 7
+    },
+    {
+      "name": "delete",
+      "number": "1",
+      "id": 8
     }
   ]
 }

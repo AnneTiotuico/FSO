@@ -23,6 +23,13 @@ const deletePerson = id => {
 }
 
 const updatePerson = (id, data) => {
+  const handleErrors = response => {
+    if (!response.ok) {
+      throw Error
+    }
+    return response
+  }
+
   let result = fetch(`${baseURL}/${id}`, {
     method: 'PUT',
     headers: {
@@ -30,7 +37,12 @@ const updatePerson = (id, data) => {
     },
     body: JSON.stringify(data),
   })
-  return result.then(response => response.json())
+  
+  return result
+          .then(handleErrors)
+          .then(response => response.json())
+          .catch(error => console.log('fail'))
+
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export
