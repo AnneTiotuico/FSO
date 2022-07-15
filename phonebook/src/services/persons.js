@@ -1,5 +1,5 @@
 // const baseURL = 'http://localhost:3001/api/persons'
-const baseURL = 'https://stark-sands-69954.herokuapp.com/api/persons'
+const baseURL = '/api/persons'
 
 const getAll = () => {
   let persons = fetch(baseURL)
