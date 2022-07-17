@@ -17,10 +17,11 @@ const create = newPerson => {
   return result.then(response => response.json())
 }
 
-const deletePerson = id => {
-  fetch(`${baseURL}/${id}`, {
+const deletePerson = async id => {
+  const response = await fetch(`${baseURL}/${id}`, {
     method: 'DELETE',
   });
+  await response.text();
 }
 
 const updatePerson = (id, data) => {

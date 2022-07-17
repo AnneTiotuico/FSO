@@ -51,13 +51,6 @@ const App = () => {
   }, [])
 
   const updatePerson = (existing) => {    
-    const handleErrors = response => {
-      if (!response.ok) {
-        throw Error
-      }
-      return response
-    }
-
     if (existing.number === newNumber) {
       alert(`${newName} is already added to phonebook`)
     } else {
@@ -65,7 +58,6 @@ const App = () => {
         existing.number = newNumber
         personService
           .updatePerson(existing.id, existing)
-          .then(handleErrors)
           .then(updatedPerson => {
             setPersons(persons.map(p => p.id !== existing.id ? p : updatedPerson))
           })
