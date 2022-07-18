@@ -6,15 +6,22 @@ const getAll = () => {
   return persons.then(response => response.json())
 }
 
-const create = newPerson => {
-  let result = fetch(baseURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(newPerson)
-      })
-  return result.then(response => response.json())
+const create = async newPerson => {
+  console.log('testing front')
+  let response = await fetch(baseURL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(newPerson)
+  })
+
+  if (response.ok) {
+    let result = await response.json()
+    return result
+  }
+  let err = await response.json()
+  throw err
 }
 
 const deletePerson = async id => {
@@ -24,15 +31,8 @@ const deletePerson = async id => {
   await response.text();
 }
 
-const updatePerson = (id, data) => {
-  const handleErrors = response => {
-    if (!response.ok) {
-      throw Error
-    }
-    return response
-  }
-
-  let result = fetch(`${baseURL}/${id}`, {
+const updatePerson = async (id, data) => {
+  let response = await fetch(`${baseURL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -40,11 +40,13 @@ const updatePerson = (id, data) => {
     body: JSON.stringify(data),
   })
   
-  return result
-          .then(handleErrors)
-          .then(response => response.json())
-          .catch(error => console.log('fail'))
+  if (response.ok) {
+    let result = await response.json()
+    return result
+  }
 
+  let err = await response.json()
+  throw err
 }
 
 // eslint-disable-next-line import/no-anonymous-default-export

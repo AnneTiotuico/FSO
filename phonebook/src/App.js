@@ -53,8 +53,7 @@ const App = () => {
   const updatePerson = (existing) => {    
     if (existing.number === newNumber) {
       alert(`${newName} is already added to phonebook`)
-    } else {
-      if (window.confirm(`${existing.name} is already added to phonebook, replace old number with a new one?`)) {
+    } else if (window.confirm(`${existing.name} is already added to phonebook, replace old number with a new one?`)) {
         existing.number = newNumber
         personService
           .updatePerson(existing.id, existing)
@@ -62,15 +61,13 @@ const App = () => {
             setPersons(persons.map(p => p.id !== existing.id ? p : updatedPerson))
           })
           .catch(error => {
-            setMessage(`Information of ${newName} has already been removed from the server`)
-            setMsgType('error')
-            setTimeout(() => {
-              setMessage(null)
-            }, 5000)
-            setPersons(persons.filter(p => p.id !== existing.id))
+            setMessage(error.error)
+              setMsgType('error')
+              setTimeout(() => {
+                setMessage(null)
+              }, 5000)
           })
       }
-    }
   }
 
   const addPerson = (event) => {
@@ -94,6 +91,8 @@ const App = () => {
       personService
         .create(newPerson)
         .then(addedPerson => {
+          console.log(newPerson)
+          console.log('testing create person app')
           setPersons([...persons, addedPerson])
           setNewName('')
           setNewNumber('')
@@ -102,7 +101,15 @@ const App = () => {
           setTimeout(() => {
             setMessage(null)
           }, 5000)
-      })
+        })
+        .catch(error => {
+          console.log(error.error)
+          setMessage(error.error)
+            setMsgType('error')
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+        })
     }
   }
 
